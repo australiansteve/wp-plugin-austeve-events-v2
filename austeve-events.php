@@ -14,6 +14,45 @@ class AUSteve_Events_CPT {
 	function __construct() {
 
 		add_action( 'init', array($this, 'register_post_type') );
+
+		add_action( 'pre_get_posts', array($this, 'sort_by_date') );
+	}
+
+	function sort_by_date($query) {
+
+		if ( ! is_admin() ) {
+
+			if ($query->get('post_type') == 'austeve-events')
+			{
+				// find date time now
+				$date_now = date('Y-m-d H:i:s');
+				$meta_query = array(
+			        'key'			=> 'event_date',
+			        'compare'		=> '>=',
+			        'value'			=> $date_now,
+			        'type'			=> 'DATETIME',
+			    );
+				$args = array(
+					'post_type' 	=> 'austeve-events',
+					'post_status' 	=> array('publish'),
+					'meta_key'		=> 'event_date',
+					'meta_type'		=> 'DATETIME',
+					'orderby'		=> 'meta_value',
+					'order' 		=> 'ASC',
+					'meta_query' 	=> $meta_query
+				);
+
+				if (isset($_GET['past-events']))
+				{
+					$args['meta_query']['compare'] = '<=';
+					$args['order'] = 'DESC';
+				}
+
+				$query->query_vars = $args;
+			}
+		}
+		return $query;
+
 	}
 
 	function register_post_type() {
@@ -40,7 +79,7 @@ class AUSteve_Events_CPT {
 			'description'         => __( 'Events', 'austeve-events' ),
 			'labels'              => $labels,
 			// Features this CPT supports in Post Editor
-			'supports'            => array( 'title', 'editor', 'author', 'revisions', ),
+			'supports'            => array( 'title', 'editor', 'author', 'revisions', 'excerpt'),
 			// You can associate this CPT with a taxonomy or custom taxonomy. 
 			'taxonomies'          => array( ),
 			/* A hierarchical CPT is like Pages and can have
