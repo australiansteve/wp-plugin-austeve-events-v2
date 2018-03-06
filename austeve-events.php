@@ -22,7 +22,7 @@ class AUSteve_Events_CPT {
 
 		if ( ! is_admin() ) {
 
-			if ($query->get('post_type') == 'austeve-events')
+			if (is_archive('austeve-events'))
 			{
 				// find date time now
 				$date_now = date('Y-m-d H:i:s');
