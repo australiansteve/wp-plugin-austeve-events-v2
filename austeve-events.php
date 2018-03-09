@@ -15,14 +15,15 @@ class AUSteve_Events_CPT {
 
 		add_action( 'init', array($this, 'register_post_type') );
 
-		add_action( 'pre_get_posts', array($this, 'sort_by_date') );
+		add_action( 'pre_get_posts', array($this, 'sort_by_date'), 999 );
 	}
 
 	function sort_by_date($query) {
 
 		if ( ! is_admin() ) {
 
-			if (is_archive('austeve-events'))
+			//error_log("Before PRE_GET_POSTS: ".print_r($query, true));
+			if ((is_archive('austeve-events') && $query->is_main_query()) || ($query->get('post_type') == 'austeve-events' && $query->get('apply_filters'))) 
 			{
 				// find date time now
 				$date_now = date('Y-m-d H:i:s');
@@ -50,6 +51,7 @@ class AUSteve_Events_CPT {
 
 				$query->query_vars = $args;
 			}
+			//error_log("After PRE_GET_POSTS: ".print_r($query, true));
 		}
 		return $query;
 
