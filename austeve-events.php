@@ -35,6 +35,7 @@ class AUSteve_Events_CPT {
 			    );
 				$args = array(
 					'post_type' 	=> 'austeve-events',
+					'posts_per_page' => $query->get('posts_per_page'),
 					'post_status' 	=> array('publish'),
 					'meta_key'		=> 'event_date',
 					'meta_type'		=> 'DATETIME',
