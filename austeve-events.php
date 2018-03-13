@@ -23,7 +23,7 @@ class AUSteve_Events_CPT {
 		if ( ! is_admin() ) {
 
 			//error_log("Before PRE_GET_POSTS: ".print_r($query, true));
-			if ((is_archive('austeve-events') && $query->is_main_query()) || ($query->get('post_type') == 'austeve-events' && $query->get('apply_filters'))) 
+			if ((is_post_type_archive('austeve-events') && $query->is_main_query()) || ($query->get('post_type') == 'austeve-events' && $query->get('apply_filters'))) 
 			{
 				// find date time now
 				$date_now = date('Y-m-d H:i:s');
